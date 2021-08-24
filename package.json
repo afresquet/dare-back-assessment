@@ -1,0 +1,31 @@
+{
+	"name": "dare-back-assessment",
+	"version": "1.0.0",
+	"main": "dist/index.js",
+	"scripts": {
+		"compile": "babel src --out-dir dist",
+		"start": "npm run compile && node dist/index"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/afresquet/dare-back-assessment.git"
+	},
+	"bugs": {
+		"url": "https://github.com/afresquet/dare-back-assessment/issues"
+	},
+	"homepage": "https://github.com/afresquet/dare-back-assessment#readme",
+	"dependencies": {
+		"dotenv": "^10.0.0",
+		"express": "^4.17.1"
+	},
+	"devDependencies": {
+		"@babel/cli": "^7.14.8",
+		"@babel/core": "^7.15.0",
+		"@babel/preset-env": "^7.15.0",
+		"eslint": "^7.32.0",
+		"eslint-config-airbnb-base": "^14.2.1",
+		"eslint-plugin-import": "^2.24.1",
+		"eslint-plugin-prettier": "^3.4.1",
+		"prettier": "2.3.2"
+	}
+}
