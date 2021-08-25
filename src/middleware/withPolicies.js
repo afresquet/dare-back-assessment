@@ -6,11 +6,11 @@ const withPolicies = () => {
 
 	return async (req, res, next) => {
 		// TODO: Check for etag caching validity
+
 		if (!policies) {
-			const { data } = await axios.post(
+			const { data } = await axios.get(
 				"https://dare-nodejs-assessment.herokuapp.com/api/policies",
-				null,
-				{ headers: { authorization: req.token } }
+				{ headers: { Authorization: req.token } }
 			);
 
 			// Create object with the client ids as the key for easier use

@@ -8,10 +8,9 @@ const withClients = () => {
 	return async (req, res, next) => {
 		// TODO: Check for etag caching validity
 		if (!clients) {
-			const { data } = await axios.post(
+			const { data } = await axios.get(
 				"https://dare-nodejs-assessment.herokuapp.com/api/clients",
-				null,
-				{ headers: { authorization: req.token } }
+				{ headers: { Authorization: req.token } }
 			);
 
 			clients = data.map(client => ({

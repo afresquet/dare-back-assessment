@@ -9,7 +9,7 @@ const withToken = () => {
 	return async (req, res, next) => {
 		// Check for token validity
 		if (!token || Date.now() >= expiryDate) {
-			const { type, token } = await axios.post(
+			const { data } = await axios.post(
 				"https://dare-nodejs-assessment.herokuapp.com/api/login",
 				{
 					client_id: process.env.INSURANCE_API_CLIENT_ID,
@@ -18,10 +18,10 @@ const withToken = () => {
 			);
 
 			// Decode token to access expiry date
-			const { exp } = jwt.decode(token);
+			const { exp } = jwt.decode(data.token);
 
 			// Save the values
-			token = `${type} ${token}`;
+			token = `${data.type} ${data.token}`;
 			expiryDate = exp;
 		}
 

@@ -32,7 +32,7 @@ loginRouter.post("/", async (req, res) => {
 	res.setHeader("Authorization", req.token);
 
 	// Return a valid Bearer access token for the valid client_credentials provided. The token has a time to live equal to expires_in
-	res.json({ type, token, expires_in: 0 });
+	res.json({ type: "type", token: "token", expires_in: 0 });
 });
 
 export default loginRouter;

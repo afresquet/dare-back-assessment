@@ -15,7 +15,7 @@ app.use(withPolicies());
 app.use(withClients());
 
 // Setup routes
-app.use(router);
+app.use("/api/v1", router);
 
 // Start server
 const port = process.env.PORT || 5000;
