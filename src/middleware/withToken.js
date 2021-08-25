@@ -8,7 +8,7 @@ const withToken = () => {
 
 	return async (req, res, next) => {
 		// Check for token validity
-		if (!token || Date.now() >= expiryDate) {
+		if (!token || Date.now() >= expiryDate * 1000) {
 			const { data } = await axios.post(
 				"https://dare-nodejs-assessment.herokuapp.com/api/login",
 				{

@@ -6,7 +6,7 @@ import policiesRouter from "./policies";
 
 const router = express.Router();
 
-router.use("/login", isAuthorized, loginRouter);
+router.use("/login", loginRouter);
 router.use("/policies", isAuthorized, policiesRouter);
 router.use("/clients", isAuthorized, clientsRouter);
 
