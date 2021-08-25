@@ -1,59 +1,31 @@
 import express from "express";
+import withPolicyById from "../middleware/withPolicyById";
+import Roles from "../types/Roles";
 
 const policiesRouter = express.Router();
 
 // Get the list of policies' client paginated and limited to 10 elements by default.
-policiesRouter.get("/", (req, res) => {
+policiesRouter.get("/", async (req, res) => {
 	// Can be accessed by client with role user (it will retrieve its own policies) and admin (it will retrieve all the policies)
 
-	const { limit } = req.query;
+	if (req.client.role !== Roles.ADMIN) {
+		res.json([req.client.policies]);
+
+		return;
+	}
+
+	const { limit = 10 } = req.query;
 
 	// List of policies' client
-	res.json([
-		{
-			id: "string",
-			amountInsured: "string",
-			email: "string",
-			inceptionDate: "string",
-			installmentPayment: true,
-		},
-	]);
+	res.json(req.policies.slice(0, limit));
 });
 
 // Get the details of a policy's client
-policiesRouter.get("/:id", (req, res) => {
+policiesRouter.get("/:id", withPolicyById, (req, res) => {
 	// Can be accessed by client with role user (it will retrieve its own policy) and admin (it will retrieve all the policies)
 
-	const { id } = req.params;
-
-	if (false) {
-		// Not Found error
-		res.status(403).json({
-			code: 0,
-			message: "string",
-		});
-
-		return;
-	}
-
-	if (false) {
-		// Forbidden error
-		res.status(404).json({
-			code: 0,
-			message: "string",
-		});
-
-		return;
-	}
-
 	// Get the details of a policy's client
-	res.json({
-		id: "string",
-		amountInsured: "string",
-		email: "string",
-		inceptionDate: "string",
-		installmentPayment: true,
-	});
+	res.json(req.policyById);
 });
 
 export default policiesRouter;

@@ -1,4 +1,6 @@
 import express from "express";
+import withClientById from "../middleware/withClientById";
+import Roles from "../types/Roles";
 
 const clientsRouter = express.Router();
 
@@ -6,106 +8,42 @@ const clientsRouter = express.Router();
 clientsRouter.get("/", (req, res) => {
 	// Can be accessed by client with role user (it will retrieve its own client details as only element of the list) and admin (it will retrieve all the clients list)
 
-	const { limit, name } = req.query;
+	if (req.client.role !== Roles.ADMIN) {
+		res.json([req.client]);
+
+		return;
+	}
+
+	const { limit = 10, name } = req.query;
 
 	// List of clients details
-	res.json([
-		{
-			id: "string",
-			name: "string",
-			email: "string",
-			role: "string",
-			policies: [
-				{
-					id: "string",
-					amountInsured: "string",
-					inceptionDate: "string",
-				},
-			],
-		},
-	]);
+	let clients = req.clients;
+
+	if (name) {
+		// Filter by name
+		clients = clients.filter(client => client.name === name);
+	}
+
+	// Limit the amount
+	clients = clients.slice(0, limit);
+
+	res.json(clients);
 });
 
 // Get the client's details
-clientsRouter.get("/:id", (req, res) => {
+clientsRouter.get("/:id", withClientById, (req, res) => {
 	// Can be accessed by client with role user (it will retrieve its own client details) and admin (it will retrieve any client details)
 
-	const { id } = req.params;
-
-	if (false) {
-		// Forbidden error
-		res.status(403).json({
-			code: 0,
-			message: "string",
-		});
-
-		return;
-	}
-
-	if (false) {
-		// Not Found error
-		res.status(404).json({
-			code: 0,
-			message: "string",
-		});
-
-		return;
-	}
-
 	// Client's details
-	res.json([
-		{
-			id: "string",
-			name: "string",
-			email: "string",
-			role: "string",
-			policies: [
-				{
-					id: "string",
-					amountInsured: "string",
-					inceptionDate: "string",
-				},
-			],
-		},
-	]);
+	res.json(req.clientById);
 });
 
 // Get the client's policies
-clientsRouter.get("/:id/policies", (req, res) => {
+clientsRouter.get("/:id/policies", withClientById, (req, res) => {
 	// Can be accessed by client with role user (it will retrieve its own client policy list) and admin (it will retrieve any client policy list)
 
-	const { id } = req.params;
-
-	if (false) {
-		// Forbidden error
-		res.status(403).json({
-			code: 0,
-			message: "string",
-		});
-
-		return;
-	}
-
-	if (false) {
-		// Not Found error
-		res.status(404).json({
-			code: 0,
-			message: "string",
-		});
-
-		return;
-	}
-
 	// Client's policies
-	res.json([
-		{
-			id: "string",
-			amountInsured: "string",
-			email: "string",
-			inceptionDate: "string",
-			installmentPayment: true,
-		},
-	]);
+	res.json(req.clientById.policies);
 });
 
 export default clientsRouter;
