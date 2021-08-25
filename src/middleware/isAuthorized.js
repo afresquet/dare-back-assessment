@@ -1,9 +1,9 @@
 const isAuthorized = (req, res, next) => {
-	if (false) {
+	if (!req.client) {
 		// Unauthorized error
 		res.status(401).json({
-			code: 0,
-			message: "string",
+			code: 401,
+			message: "Unauthorized",
 		});
 
 		return;
