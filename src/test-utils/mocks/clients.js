@@ -9,7 +9,7 @@ const mockClients = [
 		id: "e8fd159b-57c4-4d36-9bd7-a59ca13057bb",
 		name: "Manning",
 		email: "manningblankenship@quotezart.com",
-		role: "admin",
+		role: "user",
 	},
 	{
 		id: "a3b8d425-2b60-4ad7-becc-bedf2ef860bd",

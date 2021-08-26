@@ -1545,7 +1545,7 @@ const mockPolicies = [
 	},
 ];
 
-export const getMockPolicies = ({ limit }) => {
+export const getMockPolicies = ({ limit } = {}) => {
 	if (limit !== undefined) {
 		return mockPolicies.slice(0, limit);
 	}
