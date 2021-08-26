@@ -14,6 +14,7 @@ const withClientAuth = (req, res, next) => {
 
 	const [type, token] = req.headers.authorization.split(" ");
 
+	// TODO: handle expired error
 	const { clientId } = jwt.verify(token, process.env.JWT_SECRET);
 
 	const client = req.clients.find(c => c.id === clientId);
