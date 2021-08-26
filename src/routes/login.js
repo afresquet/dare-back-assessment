@@ -1,4 +1,5 @@
 import express from "express";
+import createClientToken from "../helpers/createClientToken";
 
 const loginRouter = express.Router();
 
@@ -28,11 +29,14 @@ loginRouter.post("/", async (req, res) => {
 		return;
 	}
 
-	// TODO: create user token
-	res.setHeader("Authorization", req.token);
+	const type = "Bearer";
+	const expiry = 60 * 60 * 1000;
+	const token = createClientToken(client, expiry);
+
+	res.setHeader("Authorization", `${type} ${token}`);
 
 	// Return a valid Bearer access token for the valid client_credentials provided. The token has a time to live equal to expires_in
-	res.json({ type: "type", token: "token", expires_in: 0 });
+	res.json({ type, token, expires_in: expiry });
 });
 
 export default loginRouter;
