@@ -43,7 +43,7 @@ clientsRouter.get("/:id", clientById, (req, res) => {
 // Can be accessed by client with role user (it will retrieve its own client policy list) and admin (it will retrieve any client policy list)
 clientsRouter.get("/:id/policies", clientById, (req, res) => {
 	// Client's policies with metadata
-	const policies = getClientPolicies(req.client, req.policies, true);
+	const policies = getClientPolicies(req.clientById, req.policies, true);
 
 	res.json(policies);
 });

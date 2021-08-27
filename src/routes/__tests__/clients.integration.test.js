@@ -136,4 +136,79 @@ describe("Routes - clients", () => {
 			});
 		});
 	});
+
+	describe("GET /:id/policies", () => {
+		test("responds with unauthorized error if not logged in", async () => {
+			const [responseAdmin, responseUser] = await Promise.all([
+				request(app).get(`/api/v1/clients/${adminClient.id}/policies`),
+				request(app).get(`/api/v1/clients/${userClient.id}/policies`),
+			]);
+
+			expect(responseAdmin.statusCode).toBe(Errors.UNAUTHORIZED.code);
+			expect(responseAdmin.body).toEqual(Errors.UNAUTHORIZED);
+
+			expect(responseUser.statusCode).toBe(Errors.UNAUTHORIZED.code);
+			expect(responseUser.body).toEqual(Errors.UNAUTHORIZED);
+		});
+
+		describe("user", () => {
+			test("responds with own client policies (no user client has policies currently)", async () => {
+				const response = await request(app)
+					.get(`/api/v1/clients/${userClient.id}/policies`)
+					.set("Authorization", userToken);
+
+				expect(response.statusCode).toBe(200);
+
+				expect(response.body.length).toBe(0);
+			});
+
+			test("responds with forbidden error if searches for another client's policies", async () => {
+				const response = await request(app)
+					.get(`/api/v1/clients/${adminClient.id}/policies`)
+					.set("Authorization", userToken);
+
+				expect(response.statusCode).toBe(Errors.FORBIDDEN.code);
+
+				expect(response.body).toEqual(Errors.FORBIDDEN);
+			});
+		});
+
+		describe("admin", () => {
+			test("responds with own client policies", async () => {
+				const response = await request(app)
+					.get(`/api/v1/clients/${adminClient.id}/policies`)
+					.set("Authorization", adminToken);
+
+				expect(response.statusCode).toBe(200);
+
+				expect(response.body.length).toBeGreaterThan(0);
+
+				// NOTE: No easy way to check, specifications require for the clientId to be removed, and email isn't the same as the client's
+			});
+
+			test("responds with any client details", async () => {
+				const otherClient = getMockClients({ index: 1 });
+
+				const response = await request(app)
+					.get(`/api/v1/clients/${otherClient.id}/policies`)
+					.set("Authorization", adminToken);
+
+				expect(response.statusCode).toBe(200);
+
+				expect(response.body.length).toBeGreaterThan(0);
+
+				// NOTE: No easy way to check, specifications require for the clientId to be removed, and email isn't the same as the client's
+			});
+
+			test("responds with not found error if the client doesn't exist", async () => {
+				const response = await request(app)
+					.get("/api/v1/clients/some_random_id/policies")
+					.set("Authorization", adminToken);
+
+				expect(response.statusCode).toBe(Errors.NOT_FOUND.code);
+
+				expect(response.body).toEqual(Errors.NOT_FOUND);
+			});
+		});
+	});
 });
