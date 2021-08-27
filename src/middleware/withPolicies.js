@@ -1,23 +1,35 @@
 import axios from "axios";
 
 const withPolicies = () => {
-	// TODO: take variable outside of this scope
-	let policies;
+	let policies = [];
+	let expiryDate = new Date(0);
+	let etag = "";
 
 	return async (req, res, next) => {
-		// TODO: Check for etag caching validity
+		try {
+			if (Date.now() >= expiryDate.getTime()) {
+				const { data, headers } = await axios.get(
+					"https://dare-nodejs-assessment.herokuapp.com/api/policies",
+					{ headers: { Authorization: req.token, "If-None-Match": etag } }
+				);
 
-		if (!policies) {
-			const { data } = await axios.get(
-				"https://dare-nodejs-assessment.herokuapp.com/api/policies",
-				{ headers: { Authorization: req.token } }
-			);
+				policies = data;
 
-			// Create object with the client ids as the key for easier use
-			policies = data;
+				expiryDate = new Date(headers.expires);
+				etag = headers.etag;
+			}
+		} catch (error) {
+			if (status !== 304) {
+				res.status(status).json({
+					code: status,
+					message: statusMessage,
+				});
+
+				return;
+			}
 		}
 
-		// Set the token for later use
+		// Set the policies for later use
 		req.policies = policies;
 
 		next();
