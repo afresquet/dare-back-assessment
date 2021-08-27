@@ -14,8 +14,28 @@ const clientAuth = (req, res, next) => {
 
 	const [type, token] = req.headers.authorization.split(" ");
 
-	// TODO: handle expired error
-	const { clientId } = jwt.verify(token, process.env.JWT_SECRET);
+	let clientId;
+
+	try {
+		const payload = jwt.verify(token, process.env.JWT_SECRET);
+
+		clientId = payload.clientId;
+	} catch (error) {
+		let code = 500;
+		let message = error.message;
+
+		if (error.message === "jwt expired") {
+			code = 401;
+			message = "Unauthorized, please log in";
+		} else if (error.message === "jwt malformed") {
+			code = 401;
+			message = "Invalid token";
+		}
+
+		res.status(code).json({ code, message });
+
+		return;
+	}
 
 	const client = req.clients.find(c => c.id === clientId);
 

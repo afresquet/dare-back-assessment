@@ -1,7 +1,6 @@
 import axios from "axios";
 import { getMockPolicies } from "../../test-utils/mocks/policies";
 import policiesAPI from "../policiesAPI";
-import withClients from "../withClients";
 
 jest.mock("axios");
 
@@ -110,7 +109,7 @@ describe("Middleware - policiesAPI", () => {
 
 	test("responds with error status if an error happens", async () => {
 		const mockReq = { token: "Bearer token" };
-		const middleware = withClients();
+		const middleware = policiesAPI();
 
 		const mockErrorResponse = {
 			status: 404,

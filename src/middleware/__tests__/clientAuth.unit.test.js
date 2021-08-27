@@ -76,4 +76,67 @@ describe("Middleware - clientAuth", () => {
 
 		expect(mockNext).not.toHaveBeenCalled();
 	});
+
+	test("responds with unauthorized status when the token is expired", () => {
+		const badToken = createClientToken(clients[0], 0);
+
+		const mockReq = {
+			headers: { authorization: `Bearer ${badToken}` },
+			clients,
+		};
+
+		clientAuth(mockReq, mockRes, mockNext);
+
+		expect(mockReq.clientById).toBeUndefined();
+
+		expect(mockRes.status).toHaveBeenCalledTimes(1);
+		expect(mockRes.status).toHaveBeenCalledWith(401);
+
+		expect(mockRes.json).toHaveBeenCalledTimes(1);
+		expect(mockRes.json.mock.calls[0][0].code).toBe(401);
+		expect(mockRes.json.mock.calls[0][0].message).toBe(
+			"Unauthorized, please log in"
+		);
+
+		expect(mockNext).not.toHaveBeenCalled();
+	});
+
+	test("responds with bad request status when the token isn't a jwt", () => {
+		const mockReq = {
+			headers: { authorization: "Bearer bad_token" },
+			clients,
+		};
+
+		clientAuth(mockReq, mockRes, mockNext);
+
+		expect(mockReq.clientById).toBeUndefined();
+
+		expect(mockRes.status).toHaveBeenCalledTimes(1);
+		expect(mockRes.status).toHaveBeenCalledWith(401);
+
+		expect(mockRes.json).toHaveBeenCalledTimes(1);
+		expect(mockRes.json.mock.calls[0][0].code).toBe(401);
+		expect(mockRes.json.mock.calls[0][0].message).toBe("Invalid token");
+
+		expect(mockNext).not.toHaveBeenCalled();
+	});
+
+	test("responds with internal error status when another error happens", () => {
+		const mockReq = {
+			headers: { authorization: "Bearer " },
+			clients,
+		};
+
+		clientAuth(mockReq, mockRes, mockNext);
+
+		expect(mockReq.clientById).toBeUndefined();
+
+		expect(mockRes.status).toHaveBeenCalledTimes(1);
+		expect(mockRes.status).toHaveBeenCalledWith(500);
+
+		expect(mockRes.json).toHaveBeenCalledTimes(1);
+		expect(mockRes.json.mock.calls[0][0].code).toBe(500);
+
+		expect(mockNext).not.toHaveBeenCalled();
+	});
 });
