@@ -2,7 +2,7 @@ import axios from "axios";
 import jwt from "jsonwebtoken";
 
 // Ensures there's a valid token for every request
-const withToken = () => {
+const tokenAPI = () => {
 	let token;
 	let expiryDate;
 
@@ -32,4 +32,4 @@ const withToken = () => {
 	};
 };
 
-export default withToken;
+export default tokenAPI;

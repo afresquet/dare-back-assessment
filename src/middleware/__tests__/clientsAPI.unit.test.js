@@ -1,12 +1,11 @@
 import axios from "axios";
-import { getMockPolicies } from "../../test-utils/mocks/policies";
-import withClients from "../withClients";
-import withPolicies from "../withPolicies";
+import { getMockClients } from "../../test-utils/mocks/clients";
+import clientsAPI from "../clientsAPI";
 
 jest.mock("axios");
 
-describe("Middleware - withClients", () => {
-	const policies = getMockPolicies({ limit: 5 });
+describe("Middleware - clientsAPI", () => {
+	const clients = getMockClients({ limit: 3 });
 
 	const mockRes = {
 		status: jest.fn(() => mockRes),
@@ -15,9 +14,9 @@ describe("Middleware - withClients", () => {
 	const mockNext = jest.fn();
 
 	const mockResponse = {
-		data: policies,
+		data: clients,
 		headers: {
-			etag: 'W/"AEfbepvFX2f2biqDNiA3JVwKCK4"',
+			etag: 'W/"SKM5mZWsPFcjlaUZuAS7n4e09eQ"',
 			expires: new Date(Date.now() + 60 * 1000).toString(),
 		},
 	};
@@ -28,17 +27,17 @@ describe("Middleware - withClients", () => {
 		jest.clearAllMocks();
 	});
 
-	test("fetches the policies", async () => {
-		const mockReq = { token: "Bearer token" };
-		const middleware = withPolicies();
+	test("fetches the clients", async () => {
+		const mockReq = { token: "Bearer token", policies: [] };
+		const middleware = clientsAPI();
 
 		await middleware(mockReq, mockRes, mockNext);
 
-		expect(mockReq.policies).toBe(policies);
+		expect(mockReq.clients).toHaveLength(clients.length);
 
 		expect(axios.get).toHaveBeenCalledTimes(1);
 		expect(axios.get.mock.calls[0][0]).toBe(
-			"https://dare-nodejs-assessment.herokuapp.com/api/policies"
+			"https://dare-nodejs-assessment.herokuapp.com/api/clients"
 		);
 		expect(axios.get.mock.calls[0][1].headers.Authorization).toBe(
 			mockReq.token
@@ -52,13 +51,13 @@ describe("Middleware - withClients", () => {
 	});
 
 	test("doesn't fetch again if the reponse is still fresh", async () => {
-		const mockReq = { token: "Bearer token" };
-		const middleware = withPolicies();
+		const mockReq = { token: "Bearer token", policies: [] };
+		const middleware = clientsAPI();
 
 		await middleware(mockReq, mockRes, mockNext);
 		await middleware(mockReq, mockRes, mockNext);
 
-		expect(mockReq.policies).toBe(policies);
+		expect(mockReq.clients).toHaveLength(clients.length);
 
 		expect(axios.get).toHaveBeenCalledTimes(1);
 
@@ -69,8 +68,8 @@ describe("Middleware - withClients", () => {
 	});
 
 	test("doesn't update the cache if the response has status 304", async () => {
-		const mockReq = { token: "Bearer token" };
-		const middleware = withPolicies();
+		const mockReq = { token: "Bearer token", policies: [] };
+		const middleware = clientsAPI();
 
 		axios.get.mockImplementationOnce(async => ({
 			...mockResponse,
@@ -82,9 +81,9 @@ describe("Middleware - withClients", () => {
 
 		await middleware(mockReq, mockRes, mockNext);
 
-		const fetchedPolicies = mockReq.policies;
+		const fetchedClients = mockReq.clients;
 
-		expect(fetchedPolicies).toBe(policies);
+		expect(fetchedClients).toHaveLength(clients.length);
 
 		axios.get.mockImplementation(async => {
 			throw {
@@ -98,7 +97,7 @@ describe("Middleware - withClients", () => {
 
 		await middleware(mockReq, mockRes, mockNext);
 
-		expect(mockReq.policies).toBe(fetchedPolicies);
+		expect(mockReq.clients).toBe(fetchedClients);
 
 		expect(axios.get).toHaveBeenCalledTimes(2);
 
@@ -109,8 +108,8 @@ describe("Middleware - withClients", () => {
 	});
 
 	test("responds with error status if an error happens", async () => {
-		const mockReq = { token: "Bearer token" };
-		const middleware = withClients();
+		const mockReq = { token: "Bearer token", policies: [] };
+		const middleware = clientsAPI();
 
 		const mockErrorResponse = {
 			status: 404,

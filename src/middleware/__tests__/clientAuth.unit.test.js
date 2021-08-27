@@ -1,8 +1,8 @@
 import createClientToken from "../../helpers/createClientToken";
 import { getMockClients } from "../../test-utils/mocks/clients";
-import withClientAuth from "../withClientAuth";
+import clientAuth from "../clientAuth";
 
-describe("Middleware - withClientAuth", () => {
+describe("Middleware - clientAuth", () => {
 	const clients = getMockClients();
 
 	process.env.JWT_SECRET = "secret";
@@ -27,7 +27,7 @@ describe("Middleware - withClientAuth", () => {
 			clients,
 		};
 
-		withClientAuth(mockReq, mockRes, mockNext);
+		clientAuth(mockReq, mockRes, mockNext);
 
 		expect(mockReq.client).toBe(client);
 
@@ -41,7 +41,7 @@ describe("Middleware - withClientAuth", () => {
 	test("responds with unauthorized status when the authorization header is missing", () => {
 		const mockReq = { headers: {} };
 
-		withClientAuth(mockReq, mockRes, mockNext);
+		clientAuth(mockReq, mockRes, mockNext);
 
 		expect(mockReq.clientById).toBeUndefined();
 
@@ -63,7 +63,7 @@ describe("Middleware - withClientAuth", () => {
 			clients,
 		};
 
-		withClientAuth(mockReq, mockRes, mockNext);
+		clientAuth(mockReq, mockRes, mockNext);
 
 		expect(mockReq.clientById).toBeUndefined();
 

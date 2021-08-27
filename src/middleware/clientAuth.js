@@ -5,7 +5,7 @@ const unauthorizedError = {
 	message: "Unauthorized",
 };
 
-const withClientAuth = (req, res, next) => {
+const clientAuth = (req, res, next) => {
 	if (!req.headers.authorization) {
 		res.status(401).json(unauthorizedError);
 
@@ -30,4 +30,4 @@ const withClientAuth = (req, res, next) => {
 	next();
 };
 
-export default withClientAuth;
+export default clientAuth;

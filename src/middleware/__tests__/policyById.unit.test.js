@@ -1,8 +1,8 @@
 import { getMockClients } from "../../test-utils/mocks/clients";
 import { getMockPolicies } from "../../test-utils/mocks/policies";
-import withPolicyById from "../withPolicyById";
+import policyById from "../policyById";
 
-describe("Middleware - withPolicyById", () => {
+describe("Middleware - policyById", () => {
 	const policies = getMockPolicies();
 
 	const adminClient = getMockClients({ index: 0 });
@@ -25,7 +25,7 @@ describe("Middleware - withPolicyById", () => {
 			policies,
 		};
 
-		withPolicyById(mockReq, mockRes, mockNext);
+		policyById(mockReq, mockRes, mockNext);
 
 		expect(mockReq.policyById).toBe(policies[0]);
 
@@ -43,7 +43,7 @@ describe("Middleware - withPolicyById", () => {
 			policies,
 		};
 
-		withPolicyById(mockReq, mockRes, mockNext);
+		policyById(mockReq, mockRes, mockNext);
 
 		expect(mockReq.policyById).toBe(policies[0]);
 
@@ -61,7 +61,7 @@ describe("Middleware - withPolicyById", () => {
 			policies,
 		};
 
-		withPolicyById(mockReq, mockRes, mockNext);
+		policyById(mockReq, mockRes, mockNext);
 
 		expect(mockReq.policyById).toBeUndefined();
 
@@ -82,7 +82,7 @@ describe("Middleware - withPolicyById", () => {
 			policies,
 		};
 
-		withPolicyById(mockReq, mockRes, mockNext);
+		policyById(mockReq, mockRes, mockNext);
 
 		expect(mockReq.policyById).toBeUndefined();
 

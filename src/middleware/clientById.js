@@ -1,6 +1,6 @@
 import Roles from "../types/Roles";
 
-const withClientById = (req, res, next) => {
+const clientById = (req, res, next) => {
 	const { id } = req.params;
 
 	if (req.client.role !== Roles.ADMIN) {
@@ -35,4 +35,4 @@ const withClientById = (req, res, next) => {
 	next();
 };
 
-export default withClientById;
+export default clientById;

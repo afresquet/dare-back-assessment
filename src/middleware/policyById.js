@@ -1,6 +1,6 @@
 import Roles from "../types/Roles";
 
-const withPolicyById = (req, res, next) => {
+const policyById = (req, res, next) => {
 	const { id } = req.params;
 
 	const policy = req.policies.find(p => p.id === id);
@@ -29,4 +29,4 @@ const withPolicyById = (req, res, next) => {
 	next();
 };
 
-export default withPolicyById;
+export default policyById;

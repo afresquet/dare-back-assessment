@@ -1,7 +1,7 @@
 import { getMockClients } from "../../test-utils/mocks/clients";
-import withClientById from "../withClientById";
+import clientById from "../clientById";
 
-describe("Middleware - withClientById", () => {
+describe("Middleware - clientById", () => {
 	const adminClient = getMockClients({ index: 0 });
 	const userClient = getMockClients({ index: 2 });
 
@@ -19,7 +19,7 @@ describe("Middleware - withClientById", () => {
 		test("adds client to req when searching themselves", () => {
 			const mockReq = { params: { id: userClient.id }, client: userClient };
 
-			withClientById(mockReq, mockRes, mockNext);
+			clientById(mockReq, mockRes, mockNext);
 
 			expect(mockReq.clientById).toBe(userClient);
 
@@ -33,7 +33,7 @@ describe("Middleware - withClientById", () => {
 		test("responds with forbidden status when searching another client", () => {
 			const mockReq = { params: { id: adminClient.id }, client: userClient };
 
-			withClientById(mockReq, mockRes, mockNext);
+			clientById(mockReq, mockRes, mockNext);
 
 			expect(mockReq.clientById).toBeUndefined();
 
@@ -60,7 +60,7 @@ describe("Middleware - withClientById", () => {
 				clients,
 			};
 
-			withClientById(mockReq, mockRes, mockNext);
+			clientById(mockReq, mockRes, mockNext);
 
 			expect(mockReq.clientById).toBe(targetClient);
 
@@ -78,7 +78,7 @@ describe("Middleware - withClientById", () => {
 				clients,
 			};
 
-			withClientById(mockReq, mockRes, mockNext);
+			clientById(mockReq, mockRes, mockNext);
 
 			expect(mockReq.clientById).toBeUndefined();
 

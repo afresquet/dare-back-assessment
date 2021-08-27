@@ -1,5 +1,5 @@
 import express from "express";
-import withPolicyById from "../middleware/withPolicyById";
+import policyById from "../middleware/policyById";
 import Roles from "../types/Roles";
 
 const policiesRouter = express.Router();
@@ -21,7 +21,7 @@ policiesRouter.get("/", async (req, res) => {
 });
 
 // Get the details of a policy's client
-policiesRouter.get("/:id", withPolicyById, (req, res) => {
+policiesRouter.get("/:id", policyById, (req, res) => {
 	// Can be accessed by client with role user (it will retrieve its own policy) and admin (it will retrieve all the policies)
 
 	// Get the details of a policy's client

@@ -1,5 +1,5 @@
 import express from "express";
-import withClientAuth from "../middleware/withClientAuth";
+import clientAuth from "../middleware/clientAuth";
 import clientsRouter from "./clients";
 import loginRouter from "./login";
 import policiesRouter from "./policies";
@@ -7,7 +7,7 @@ import policiesRouter from "./policies";
 const router = express.Router();
 
 router.use("/login", loginRouter);
-router.use("/policies", withClientAuth, policiesRouter);
-router.use("/clients", withClientAuth, clientsRouter);
+router.use("/policies", clientAuth, policiesRouter);
+router.use("/clients", clientAuth, clientsRouter);
 
 export default router;

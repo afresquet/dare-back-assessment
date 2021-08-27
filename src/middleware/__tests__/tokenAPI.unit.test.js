@@ -1,11 +1,11 @@
 import axios from "axios";
 import jwt from "jsonwebtoken";
 import delay from "../../test-utils/delay";
-import withToken from "../withToken";
+import tokenAPI from "../tokenAPI";
 
 jest.mock("axios");
 
-describe("Middleware - withToken", () => {
+describe("Middleware - tokenAPI", () => {
 	const mockRes = {};
 	const mockNext = jest.fn();
 
@@ -22,7 +22,7 @@ describe("Middleware - withToken", () => {
 
 		const mockReq = {};
 
-		const middleware = withToken();
+		const middleware = tokenAPI();
 		await middleware(mockReq, mockRes, mockNext);
 
 		expect(axios.post).toHaveBeenCalledTimes(1);
@@ -41,7 +41,7 @@ describe("Middleware - withToken", () => {
 
 		const mockReq = {};
 
-		const middleware = withToken();
+		const middleware = tokenAPI();
 		await middleware(mockReq, mockRes, mockNext);
 		await middleware(mockReq, mockRes, mockNext);
 
@@ -61,7 +61,7 @@ describe("Middleware - withToken", () => {
 
 		const mockReq = {};
 
-		const middleware = withToken();
+		const middleware = tokenAPI();
 		await middleware(mockReq, mockRes, mockNext);
 
 		expect(axios.post).toHaveBeenCalledTimes(1);

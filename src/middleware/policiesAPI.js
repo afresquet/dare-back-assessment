@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const withPolicies = () => {
+const policiesAPI = () => {
 	let policies = [];
 	let expiryDate = new Date(0);
 	let etag = "";
@@ -39,4 +39,4 @@ const withPolicies = () => {
 	};
 };
 
-export default withPolicies;
+export default policiesAPI;

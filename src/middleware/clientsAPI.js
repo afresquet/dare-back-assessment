@@ -1,7 +1,7 @@
 import axios from "axios";
 import getClientPolicies from "../helpers/getUserPolicies";
 
-const withClients = () => {
+const clientsAPI = () => {
 	let clients = [];
 	let expiryDate = new Date(0);
 	let etag = "";
@@ -45,4 +45,4 @@ const withClients = () => {
 	};
 };
 
-export default withClients;
+export default clientsAPI;

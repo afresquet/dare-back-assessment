@@ -1,5 +1,5 @@
 import express from "express";
-import withClientById from "../middleware/withClientById";
+import clientById from "../middleware/clientById";
 import Roles from "../types/Roles";
 
 const clientsRouter = express.Router();
@@ -31,7 +31,7 @@ clientsRouter.get("/", (req, res) => {
 });
 
 // Get the client's details
-clientsRouter.get("/:id", withClientById, (req, res) => {
+clientsRouter.get("/:id", clientById, (req, res) => {
 	// Can be accessed by client with role user (it will retrieve its own client details) and admin (it will retrieve any client details)
 
 	// Client's details
@@ -39,7 +39,7 @@ clientsRouter.get("/:id", withClientById, (req, res) => {
 });
 
 // Get the client's policies
-clientsRouter.get("/:id/policies", withClientById, (req, res) => {
+clientsRouter.get("/:id/policies", clientById, (req, res) => {
 	// Can be accessed by client with role user (it will retrieve its own client policy list) and admin (it will retrieve any client policy list)
 
 	// Client's policies
