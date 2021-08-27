@@ -1,4 +1,4 @@
-import { getMockClients } from "../../test-utils/mocks/clients";
+import { getMockClients } from "../../../test-utils/mocks/clients";
 import Errors from "../../types/Errors";
 import clientById from "../clientById";
 

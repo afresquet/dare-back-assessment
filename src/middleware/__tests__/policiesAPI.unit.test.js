@@ -1,5 +1,5 @@
 import axios from "axios";
-import { getMockPolicies } from "../../test-utils/mocks/policies";
+import { getMockPolicies } from "../../../test-utils/mocks/policies";
 import policiesAPI from "../policiesAPI";
 
 jest.mock("axios");

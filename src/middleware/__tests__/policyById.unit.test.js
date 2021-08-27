@@ -1,5 +1,5 @@
-import { getMockClients } from "../../test-utils/mocks/clients";
-import { getMockPolicies } from "../../test-utils/mocks/policies";
+import { getMockClients } from "../../../test-utils/mocks/clients";
+import { getMockPolicies } from "../../../test-utils/mocks/policies";
 import Errors from "../../types/Errors";
 import policyById from "../policyById";
 

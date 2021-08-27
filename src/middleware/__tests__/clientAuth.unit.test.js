@@ -1,12 +1,10 @@
+import { getMockClients } from "../../../test-utils/mocks/clients";
 import createClientToken from "../../helpers/createClientToken";
-import { getMockClients } from "../../test-utils/mocks/clients";
 import Errors from "../../types/Errors";
 import clientAuth from "../clientAuth";
 
 describe("Middleware - clientAuth", () => {
 	const clients = getMockClients();
-
-	process.env.JWT_SECRET = "secret";
 
 	const mockRes = {
 		status: jest.fn(() => mockRes),

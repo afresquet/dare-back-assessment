@@ -3,7 +3,7 @@
 	"version": "1.0.0",
 	"main": "dist/index.js",
 	"scripts": {
-		"test": "jest",
+		"test": "jest --setupFiles ./test-utils/setupTests.js",
 		"compile": "babel src --out-dir dist",
 		"start": "npm run compile && node dist/index"
 	},

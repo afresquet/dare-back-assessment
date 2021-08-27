@@ -1,5 +1,5 @@
-import { getMockClients } from "../../test-utils/mocks/clients";
-import { getMockPolicies } from "../../test-utils/mocks/policies";
+import { getMockClients } from "../../../test-utils/mocks/clients";
+import { getMockPolicies } from "../../../test-utils/mocks/policies";
 import getClientPolicies from "../getClientPolicies";
 
 describe("Helpers - getClientPolicies", () => {

@@ -1,4 +1,4 @@
-import { getMockClients } from "../../test-utils/mocks/clients";
+import { getMockClients } from "../../../test-utils/mocks/clients";
 import Errors from "../../types/Errors";
 import login from "../login";
 
@@ -14,8 +14,6 @@ describe("Middleware - login", () => {
 	afterEach(() => {
 		jest.clearAllMocks();
 	});
-
-	process.env.JWT_SECRET = "secret";
 
 	test("Responds with token, its type and its expiration date", () => {
 		const mockReq = {

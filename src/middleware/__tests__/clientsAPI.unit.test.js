@@ -1,5 +1,5 @@
 import axios from "axios";
-import { getMockClients } from "../../test-utils/mocks/clients";
+import { getMockClients } from "../../../test-utils/mocks/clients";
 import clientsAPI from "../clientsAPI";
 
 jest.mock("axios");

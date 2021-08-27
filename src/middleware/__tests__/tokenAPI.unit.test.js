@@ -1,6 +1,6 @@
 import axios from "axios";
 import jwt from "jsonwebtoken";
-import delay from "../../test-utils/delay";
+import delay from "../../../test-utils/delay";
 import tokenAPI from "../tokenAPI";
 
 jest.mock("axios");
