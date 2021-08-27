@@ -3,12 +3,14 @@ import jwt from "jsonwebtoken";
 
 // Ensures there's a valid token for every request
 const tokenAPI = () => {
-	let token;
-	let expiryDate;
+	// Scoped cache
+	let token = "";
+	let expiryDate = 0;
 
+	// Middleware
 	return async (req, res, next) => {
-		// Check for token validity
-		if (!token || Date.now() >= expiryDate * 1000) {
+		// Check for expiry date validity
+		if (Date.now() >= expiryDate * 1000) {
 			const { data } = await axios.post(
 				"https://dare-nodejs-assessment.herokuapp.com/api/login",
 				{
@@ -20,7 +22,7 @@ const tokenAPI = () => {
 			// Decode token to access expiry date
 			const { exp } = jwt.decode(data.token);
 
-			// Save the values
+			// Save in cache
 			token = `${data.type} ${data.token}`;
 			expiryDate = exp;
 		}

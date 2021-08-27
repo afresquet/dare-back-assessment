@@ -4,11 +4,12 @@ import Roles from "../types/Roles";
 
 const clientsRouter = express.Router();
 
-//Get the list of clients details paginated and limited to 10 elements by default. This API endpoint access also an optional filter query to filter by client name.
+// Get the list of clients details paginated and limited to 10 elements by default. This API endpoint access also an optional filter query to filter by client name.
+// Can be accessed by client with role user (it will retrieve its own client details as only element of the list) and admin (it will retrieve all the clients list)
 clientsRouter.get("/", (req, res) => {
-	// Can be accessed by client with role user (it will retrieve its own client details as only element of the list) and admin (it will retrieve all the clients list)
-
+	// Handle user client
 	if (req.client.role !== Roles.ADMIN) {
+		// Retrieve themselves
 		res.json([req.client]);
 
 		return;
@@ -31,17 +32,15 @@ clientsRouter.get("/", (req, res) => {
 });
 
 // Get the client's details
+// Can be accessed by client with role user (it will retrieve its own client details) and admin (it will retrieve any client details)
 clientsRouter.get("/:id", clientById, (req, res) => {
-	// Can be accessed by client with role user (it will retrieve its own client details) and admin (it will retrieve any client details)
-
 	// Client's details
 	res.json(req.clientById);
 });
 
 // Get the client's policies
+// Can be accessed by client with role user (it will retrieve its own client policy list) and admin (it will retrieve any client policy list)
 clientsRouter.get("/:id/policies", clientById, (req, res) => {
-	// Can be accessed by client with role user (it will retrieve its own client policy list) and admin (it will retrieve any client policy list)
-
 	// Client's policies
 	res.json(req.clientById.policies);
 });

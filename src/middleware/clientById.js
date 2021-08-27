@@ -3,8 +3,10 @@ import Roles from "../types/Roles";
 const clientById = (req, res, next) => {
 	const { id } = req.params;
 
+	// Handle user client
 	if (req.client.role !== Roles.ADMIN) {
 		if (req.client.id === id) {
+			// Searching for themselves
 			req.clientById = req.client;
 
 			next();
@@ -18,6 +20,7 @@ const clientById = (req, res, next) => {
 		return;
 	}
 
+	// Find client
 	const client = req.clients.find(c => c.id === id);
 
 	if (!client) {
@@ -30,6 +33,7 @@ const clientById = (req, res, next) => {
 		return;
 	}
 
+	// Save client for later use
 	req.clientById = client;
 
 	next();

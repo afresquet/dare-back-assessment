@@ -6,6 +6,7 @@ const unauthorizedError = {
 };
 
 const clientAuth = (req, res, next) => {
+	// Check for Authorization header
 	if (!req.headers.authorization) {
 		res.status(401).json(unauthorizedError);
 
@@ -17,6 +18,7 @@ const clientAuth = (req, res, next) => {
 	let clientId;
 
 	try {
+		// Verify that token is valid
 		const payload = jwt.verify(token, process.env.JWT_SECRET);
 
 		clientId = payload.clientId;
@@ -37,6 +39,7 @@ const clientAuth = (req, res, next) => {
 		return;
 	}
 
+	// Find the client
 	const client = req.clients.find(c => c.id === clientId);
 
 	if (!client) {

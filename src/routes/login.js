@@ -17,6 +17,9 @@ loginRouter.post("/", async (req, res) => {
 		return;
 	}
 
+	// TODO: handle password (don't know how without sign up endpoint)
+
+	// Find client
 	const client = req.clients.find(c => c.email === username);
 
 	if (!client) {
@@ -29,10 +32,12 @@ loginRouter.post("/", async (req, res) => {
 		return;
 	}
 
+	// Create token
 	const type = "Bearer";
 	const expiry = 60 * 60 * 1000;
 	const token = createClientToken(client, expiry);
 
+	// Set token in header
 	res.setHeader("Authorization", `${type} ${token}`);
 
 	// Return a valid Bearer access token for the valid client_credentials provided. The token has a time to live equal to expires_in

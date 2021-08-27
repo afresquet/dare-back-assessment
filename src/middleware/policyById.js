@@ -3,6 +3,7 @@ import Roles from "../types/Roles";
 const policyById = (req, res, next) => {
 	const { id } = req.params;
 
+	// Find policy
 	const policy = req.policies.find(p => p.id === id);
 
 	if (!policy) {
@@ -15,6 +16,7 @@ const policyById = (req, res, next) => {
 		return;
 	}
 
+	// Check if client isn't and admin and is looking for a policy that is not theirs
 	if (req.client.role !== Roles.ADMIN && req.client.id !== policy.clientId) {
 		res.status(403).json({
 			code: 403,
@@ -24,6 +26,7 @@ const policyById = (req, res, next) => {
 		return;
 	}
 
+	// Save policy for later use
 	req.policyById = policy;
 
 	next();
