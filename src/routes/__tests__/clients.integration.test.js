@@ -12,7 +12,7 @@ describe("Routes - clients", () => {
 	const userToken = `Bearer ${createClientToken(userClient)}`;
 
 	describe("GET /", () => {
-		test("fails if not authorized", async () => {
+		test("responds with unauthorized error if not logged in", async () => {
 			const response = await request(app).get("/api/v1/clients");
 
 			expect(response.statusCode).toBe(Errors.UNAUTHORIZED.code);
@@ -64,6 +64,75 @@ describe("Routes - clients", () => {
 
 				expect(response.body).toHaveLength(1);
 				expect(response.body[0].name).toBe(userClient.name);
+			});
+		});
+	});
+
+	describe("GET /:id", () => {
+		test("responds with unauthorized error if not logged in", async () => {
+			const [responseAdmin, responseUser] = await Promise.all([
+				request(app).get(`/api/v1/clients/${adminClient.id}`),
+				request(app).get(`/api/v1/clients/${userClient.id}`),
+			]);
+
+			expect(responseAdmin.statusCode).toBe(Errors.UNAUTHORIZED.code);
+			expect(responseAdmin.body).toEqual(Errors.UNAUTHORIZED);
+
+			expect(responseUser.statusCode).toBe(Errors.UNAUTHORIZED.code);
+			expect(responseUser.body).toEqual(Errors.UNAUTHORIZED);
+		});
+
+		describe("user", () => {
+			test("responds with own client details", async () => {
+				const response = await request(app)
+					.get(`/api/v1/clients/${userClient.id}`)
+					.set("Authorization", userToken);
+
+				expect(response.statusCode).toBe(200);
+
+				expect(response.body[0].id).toBe(userClient.id);
+			});
+
+			test("responds with forbidden status if searches for another client", async () => {
+				const response = await request(app)
+					.get(`/api/v1/clients/${adminClient.id}`)
+					.set("Authorization", userToken);
+
+				expect(response.statusCode).toBe(Errors.FORBIDDEN.code);
+
+				expect(response.body).toEqual(Errors.FORBIDDEN);
+			});
+		});
+
+		describe("admin", () => {
+			test("responds with own client details", async () => {
+				const response = await request(app)
+					.get(`/api/v1/clients/${adminClient.id}`)
+					.set("Authorization", adminToken);
+
+				expect(response.statusCode).toBe(200);
+
+				expect(response.body[0].id).toBe(adminClient.id);
+			});
+
+			test("responds with any client details", async () => {
+				const response = await request(app)
+					.get(`/api/v1/clients/${userClient.id}`)
+					.set("Authorization", adminToken);
+
+				expect(response.statusCode).toBe(200);
+
+				expect(response.body[0].id).toBe(userClient.id);
+			});
+
+			test("responds with not found error if the client doesn't exist", async () => {
+				const response = await request(app)
+					.get("/api/v1/clients/some_random_id")
+					.set("Authorization", adminToken);
+
+				expect(response.statusCode).toBe(Errors.NOT_FOUND.code);
+
+				expect(response.body).toEqual(Errors.NOT_FOUND);
 			});
 		});
 	});
