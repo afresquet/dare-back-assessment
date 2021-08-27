@@ -30,7 +30,7 @@ policiesRouter.get("/", async (req, res) => {
 // Can be accessed by client with role user (it will retrieve its own policy) and admin (it will retrieve all the policies)
 policiesRouter.get("/:id", policyById, (req, res) => {
 	// Get the details of a policy's client
-	res.json(req.policyById);
+	res.json([req.policyById]);
 });
 
 export default policiesRouter;

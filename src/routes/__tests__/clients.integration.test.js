@@ -43,7 +43,7 @@ describe("Routes - clients", () => {
 				expect(response.body).toHaveLength(10);
 			});
 
-			test("responds with an array of a set amount clients", async () => {
+			test("responds with an array of a set amount of clients", async () => {
 				const limit = 5;
 
 				const response = await request(app)

@@ -225,13 +225,15 @@ Request params
 Response body
 
 ```json
-{
-	"id": "string",
-	"amountInsured": "string",
-	"email": "string",
-	"inceptionDate": "string",
-	"installmentPayment": true
-}
+[
+	{
+		"id": "string",
+		"amountInsured": "string",
+		"email": "string",
+		"inceptionDate": "string",
+		"installmentPayment": true
+	}
+]
 ```
 
 Returns the policy that belongs to the passed id.
