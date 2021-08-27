@@ -18,7 +18,7 @@ const withPolicies = () => {
 				expiryDate = new Date(headers.expires);
 				etag = headers.etag;
 			}
-		} catch (error) {
+		} catch ({ response: { status, statusMessage, headers } }) {
 			if (status !== 304) {
 				res.status(status).json({
 					code: status,
@@ -27,6 +27,9 @@ const withPolicies = () => {
 
 				return;
 			}
+
+			expiryDate = new Date(headers.expires);
+			etag = headers.etag;
 		}
 
 		// Set the policies for later use

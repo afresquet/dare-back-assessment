@@ -1165,9 +1165,11 @@ const mockClients = [
 	},
 ];
 
-export const getMockClients = ({ index } = {}) => {
+export const getMockClients = ({ index, limit } = {}) => {
 	if (index !== undefined) {
 		return mockClients[index];
+	} else if (limit !== undefined) {
+		return mockClients.slice(0, limit);
 	}
 
 	return mockClients;

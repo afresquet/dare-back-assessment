@@ -24,7 +24,7 @@ const withClients = () => {
 				expiryDate = new Date(headers.expires);
 				etag = headers.etag;
 			}
-		} catch ({ response: { status, statusMessage } }) {
+		} catch ({ response: { status, statusMessage, headers } }) {
 			if (status !== 304) {
 				res.status(status).json({
 					code: status,
@@ -33,6 +33,9 @@ const withClients = () => {
 
 				return;
 			}
+
+			expiryDate = new Date(headers.expires);
+			etag = headers.etag;
 		}
 
 		// Set the clients for later use
