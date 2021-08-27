@@ -4,6 +4,7 @@
 	"main": "dist/index.js",
 	"scripts": {
 		"test": "jest --setupFiles ./test-utils/setupTests.js",
+		"test:watch": "jest --setupFiles ./test-utils/setupTests.js --watch",
 		"compile": "babel src --out-dir dist",
 		"start": "npm run compile && node dist/index"
 	},
@@ -32,6 +33,7 @@
 		"eslint-plugin-import": "^2.24.1",
 		"eslint-plugin-prettier": "^3.4.1",
 		"jest": "^27.0.6",
-		"prettier": "2.3.2"
+		"prettier": "2.3.2",
+		"supertest": "^6.1.6"
 	}
 }
