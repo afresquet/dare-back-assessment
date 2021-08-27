@@ -1,14 +1,12 @@
 import createClientToken from "../helpers/createClientToken";
+import Errors from "../types/Errors";
 
 const login = (req, res) => {
 	const { username, password } = req.body;
 
 	if (!username || !password) {
 		// Bad request
-		res.status(400).json({
-			code: 400,
-			message: "Invalid inputs",
-		});
+		res.status(Errors.BAD_REQUEST.code).json(Errors.BAD_REQUEST);
 
 		return;
 	}
@@ -20,10 +18,7 @@ const login = (req, res) => {
 
 	if (!client) {
 		// Unauthorized error
-		res.status(401).json({
-			code: 401,
-			message: "Unauthorized",
-		});
+		res.status(Errors.UNAUTHORIZED.code).json(Errors.UNAUTHORIZED);
 
 		return;
 	}

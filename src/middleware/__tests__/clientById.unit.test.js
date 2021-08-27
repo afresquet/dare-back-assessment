@@ -1,4 +1,5 @@
 import { getMockClients } from "../../test-utils/mocks/clients";
+import Errors from "../../types/Errors";
 import clientById from "../clientById";
 
 describe("Middleware - clientById", () => {
@@ -38,11 +39,10 @@ describe("Middleware - clientById", () => {
 			expect(mockReq.clientById).toBeUndefined();
 
 			expect(mockRes.status).toHaveBeenCalledTimes(1);
-			expect(mockRes.status).toHaveBeenCalledWith(403);
+			expect(mockRes.status).toHaveBeenCalledWith(Errors.FORBIDDEN.code);
 
 			expect(mockRes.json).toHaveBeenCalledTimes(1);
-			expect(mockRes.json.mock.calls[0][0].code).toBe(403);
-			expect(mockRes.json.mock.calls[0][0].message).toBe("Forbidden");
+			expect(mockRes.json).toHaveBeenCalledWith(Errors.FORBIDDEN);
 
 			expect(mockNext).not.toHaveBeenCalled();
 		});
@@ -83,11 +83,10 @@ describe("Middleware - clientById", () => {
 			expect(mockReq.clientById).toBeUndefined();
 
 			expect(mockRes.status).toHaveBeenCalledTimes(1);
-			expect(mockRes.status).toHaveBeenCalledWith(404);
+			expect(mockRes.status).toHaveBeenCalledWith(Errors.NOT_FOUND.code);
 
 			expect(mockRes.json).toHaveBeenCalledTimes(1);
-			expect(mockRes.json.mock.calls[0][0].code).toBe(404);
-			expect(mockRes.json.mock.calls[0][0].message).toBe("Client not found");
+			expect(mockRes.json).toHaveBeenCalledWith(Errors.NOT_FOUND);
 
 			expect(mockNext).not.toHaveBeenCalled();
 		});

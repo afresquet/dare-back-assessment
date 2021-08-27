@@ -1,4 +1,5 @@
 import { getMockClients } from "../../test-utils/mocks/clients";
+import Errors from "../../types/Errors";
 import login from "../login";
 
 describe("Middleware - login", () => {
@@ -46,13 +47,10 @@ describe("Middleware - login", () => {
 		expect(mockRes.setHeader).not.toHaveBeenCalled();
 
 		expect(mockRes.status).toHaveBeenCalledTimes(1);
-		expect(mockRes.status).toHaveBeenCalledWith(400);
+		expect(mockRes.status).toHaveBeenCalledWith(Errors.BAD_REQUEST.code);
 
 		expect(mockRes.json).toHaveBeenCalledTimes(1);
-		expect(mockRes.json).toHaveBeenCalledWith({
-			code: 400,
-			message: "Invalid inputs",
-		});
+		expect(mockRes.json).toHaveBeenCalledWith(Errors.BAD_REQUEST);
 	});
 
 	test("responds with unauthorized status if the client doesn't exist", () => {
@@ -66,12 +64,9 @@ describe("Middleware - login", () => {
 		expect(mockRes.setHeader).not.toHaveBeenCalled();
 
 		expect(mockRes.status).toHaveBeenCalledTimes(1);
-		expect(mockRes.status).toHaveBeenCalledWith(401);
+		expect(mockRes.status).toHaveBeenCalledWith(Errors.UNAUTHORIZED.code);
 
 		expect(mockRes.json).toHaveBeenCalledTimes(1);
-		expect(mockRes.json).toHaveBeenCalledWith({
-			code: 401,
-			message: "Unauthorized",
-		});
+		expect(mockRes.json).toHaveBeenCalledWith(Errors.UNAUTHORIZED);
 	});
 });

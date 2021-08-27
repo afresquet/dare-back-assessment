@@ -1,14 +1,10 @@
 import jwt from "jsonwebtoken";
-
-const unauthorizedError = {
-	code: 401,
-	message: "Unauthorized",
-};
+import Errors from "../types/Errors";
 
 const clientAuth = (req, res, next) => {
 	// Check for Authorization header
 	if (!req.headers.authorization) {
-		res.status(401).json(unauthorizedError);
+		res.status(Errors.UNAUTHORIZED.code).json(Errors.UNAUTHORIZED);
 
 		return;
 	}
@@ -22,19 +18,17 @@ const clientAuth = (req, res, next) => {
 		const payload = jwt.verify(token, process.env.JWT_SECRET);
 
 		clientId = payload.clientId;
-	} catch (error) {
-		let code = 500;
-		let message = error.message;
+	} catch ({ message }) {
+		let error = {
+			code: 500,
+			message,
+		};
 
-		if (error.message === "jwt expired") {
-			code = 401;
-			message = "Unauthorized, please log in";
-		} else if (error.message === "jwt malformed") {
-			code = 401;
-			message = "Invalid token";
+		if (message === "jwt expired" || message === "jwt malformed") {
+			error = Errors.UNAUTHORIZED;
 		}
 
-		res.status(code).json({ code, message });
+		res.status(error.code).json(error);
 
 		return;
 	}
@@ -43,7 +37,7 @@ const clientAuth = (req, res, next) => {
 	const client = req.clients.find(c => c.id === clientId);
 
 	if (!client) {
-		res.status(401).json(unauthorizedError);
+		res.status(Errors.UNAUTHORIZED.code).json(Errors.UNAUTHORIZED);
 
 		return;
 	}

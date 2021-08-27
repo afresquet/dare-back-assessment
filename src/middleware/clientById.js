@@ -1,3 +1,4 @@
+import Errors from "../types/Errors";
 import Roles from "../types/Roles";
 
 const clientById = (req, res, next) => {
@@ -11,10 +12,7 @@ const clientById = (req, res, next) => {
 
 			next();
 		} else {
-			res.status(403).json({
-				code: 403,
-				message: "Forbidden",
-			});
+			res.status(Errors.FORBIDDEN.code).json(Errors.FORBIDDEN);
 		}
 
 		return;
@@ -25,10 +23,7 @@ const clientById = (req, res, next) => {
 
 	if (!client) {
 		// Not Found error
-		res.status(404).json({
-			code: 404,
-			message: "Client not found",
-		});
+		res.status(Errors.NOT_FOUND.code).json(Errors.NOT_FOUND);
 
 		return;
 	}
