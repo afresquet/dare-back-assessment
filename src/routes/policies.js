@@ -1,4 +1,5 @@
 import express from "express";
+import getClientPolicies from "../helpers/getClientPolicies";
 import policyById from "../middleware/policyById";
 import Roles from "../types/Roles";
 
@@ -10,15 +11,19 @@ policiesRouter.get("/", async (req, res) => {
 	// Handle user client
 	if (req.client.role !== Roles.ADMIN) {
 		// Retrieve their own policies
-		res.json(req.client.policies);
+		res.json(getClientPolicies(req.client, req.policies, true));
 
 		return;
 	}
 
 	const { limit = 10 } = req.query;
 
-	// List of policies' client
-	res.json(req.policies.slice(0, limit));
+	// List of policies without clientId
+	const policies = req.policies
+		.slice(0, limit)
+		.map(({ clientId, ...policy }) => policy);
+
+	res.json(policies);
 });
 
 // Get the details of a policy's client

@@ -127,19 +127,21 @@ Request params
 Response body
 
 ```json
-{
-	"id": "string",
-	"name": "string",
-	"email": "string",
-	"role": "string",
-	"policies": [
-		{
-			"id": "string",
-			"amountInsured": "string",
-			"inceptionDate": "string"
-		}
-	]
-}
+[
+	{
+		"id": "string",
+		"name": "string",
+		"email": "string",
+		"role": "string",
+		"policies": [
+			{
+				"id": "string",
+				"amountInsured": "string",
+				"inceptionDate": "string"
+			}
+		]
+	}
+]
 ```
 
 Returns the client details that belong to the specified id.

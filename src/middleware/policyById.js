@@ -16,8 +16,11 @@ const policyById = (req, res, next) => {
 		return;
 	}
 
+	// Destructure to remove clientId
+	const { clientId, ...rest } = policy;
+
 	// Check if client isn't and admin and is looking for a policy that is not theirs
-	if (req.client.role !== Roles.ADMIN && req.client.id !== policy.clientId) {
+	if (req.client.role !== Roles.ADMIN && req.client.id !== clientId) {
 		res.status(403).json({
 			code: 403,
 			message: "Forbidden",
@@ -27,7 +30,7 @@ const policyById = (req, res, next) => {
 	}
 
 	// Save policy for later use
-	req.policyById = policy;
+	req.policyById = rest;
 
 	next();
 };

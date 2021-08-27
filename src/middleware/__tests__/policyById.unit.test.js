@@ -27,7 +27,7 @@ describe("Middleware - policyById", () => {
 
 		policyById(mockReq, mockRes, mockNext);
 
-		expect(mockReq.policyById).toBe(policies[0]);
+		expect(mockReq.policyById.id).toBe(policies[0].id);
 
 		expect(mockRes.status).not.toHaveBeenCalled();
 
@@ -45,7 +45,7 @@ describe("Middleware - policyById", () => {
 
 		policyById(mockReq, mockRes, mockNext);
 
-		expect(mockReq.policyById).toBe(policies[0]);
+		expect(mockReq.policyById.id).toBe(policies[0].id);
 
 		expect(mockRes.status).not.toHaveBeenCalled();
 

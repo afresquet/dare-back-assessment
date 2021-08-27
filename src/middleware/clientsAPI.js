@@ -1,5 +1,5 @@
 import axios from "axios";
-import getClientPolicies from "../helpers/getUserPolicies";
+import getClientPolicies from "../helpers/getClientPolicies";
 
 const clientsAPI = () => {
 	// Scoped cache
