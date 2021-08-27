@@ -2,21 +2,37 @@ import axios from "axios";
 import getClientPolicies from "../helpers/getUserPolicies";
 
 const withClients = () => {
-	// TODO: take variable outside of this scope
-	let clients;
+	let clients = [];
+	let expiryDate = new Date(0);
+	let etag = "";
 
 	return async (req, res, next) => {
-		// TODO: Check for etag caching validity
-		if (!clients) {
-			const { data } = await axios.get(
-				"https://dare-nodejs-assessment.herokuapp.com/api/clients",
-				{ headers: { Authorization: req.token } }
-			);
+		try {
+			if (Date.now() >= expiryDate.getTime()) {
+				const { data, headers } = await axios.get(
+					"https://dare-nodejs-assessment.herokuapp.com/api/clients",
+					{
+						headers: { Authorization: req.token, "If-None-Match": etag },
+					}
+				);
 
-			clients = data.map(client => ({
-				...client,
-				policies: getClientPolicies(client, req.policies),
-			}));
+				clients = data.map(client => ({
+					...client,
+					policies: getClientPolicies(client, req.policies),
+				}));
+
+				expiryDate = new Date(headers.expires);
+				etag = headers.etag;
+			}
+		} catch ({ response: { status, statusMessage } }) {
+			if (status !== 304) {
+				res.status(status).json({
+					code: status,
+					message: statusMessage,
+				});
+
+				return;
+			}
 		}
 
 		// Set the clients for later use
